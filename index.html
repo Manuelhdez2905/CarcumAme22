@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Feliz Cumpleaños, America 🎉</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --verde-oscuro: #0b2d18;
+    --verde-hoja: #1a6b35;
+    --verde-claro: #4dab5e;
+    --verde-lima: #7ed56f;
+    --verde-menta: #a8e4a0;
+    --crema: #f5f0e8;
+    --oro: #c8a84b;
+    --oro-claro: #e8d08a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--verde-oscuro);
+    color: var(--crema);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ─── CANVAS CONFETI ─── */
+  #confeti-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  /* ─── FONDO ─── */
+  .fondo {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 20%, rgba(26,107,53,0.45) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 80%, rgba(77,171,94,0.18) 0%, transparent 60%),
+      var(--verde-oscuro);
+    animation: moverFondo 18s ease-in-out infinite alternate;
+  }
+
+  @keyframes moverFondo {
+    from { background-position: 0% 0%; }
+    to   { background-position: 3% 5%; }
+  }
+
+  /* ─── GLOBOS ─── */
+  #globos {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .globo {
+    position: absolute;
+    bottom: -100px;
+    animation: subirGlobo linear infinite;
+    will-change: transform;
+  }
+
+  @keyframes subirGlobo {
+    0%   { transform: translateY(0) rotate(-8deg); opacity: 0; }
+    5%   { opacity: 0.35; }
+    50%  { transform: translateY(-55vh) translateX(12px) rotate(8deg); opacity: 0.2; }
+    95%  { opacity: 0.05; }
+    100% { transform: translateY(-115vh) translateX(-5px) rotate(-4deg); opacity: 0; }
+  }
+
+  /* ─── CONTENIDO ─── */
+  .contenido {
+    position: relative;
+    z-index: 2;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 0 40px;
+  }
+
+  .badge-22 {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    border: 1.5px solid var(--verde-lima);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--verde-lima);
+    margin: 0 auto 28px;
+    position: relative;
+    animation: pulsarBadge 3s ease-in-out infinite;
+  }
+
+  .badge-22::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    border: 0.5px solid rgba(126,213,111,0.18);
+    animation: pulsarBadge 3s ease-in-out infinite reverse;
+  }
+
+  @keyframes pulsarBadge {
+    0%,100% { box-shadow: 0 0 0 0 rgba(126,213,111,0.25); transform: scale(1); }
+    50%      { box-shadow: 0 0 0 14px rgba(126,213,111,0); transform: scale(1.04); }
+  }
+
+  .hero-pre {
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--verde-lima);
+    font-weight: 400;
+    margin-bottom: 14px;
+    opacity: 0;
+    animation: aparecer 0.9s ease 0.3s forwards;
+  }
+
+  .hero-titulo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 11vw, 68px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+    color: var(--crema);
+    opacity: 0;
+    animation: aparecer 0.9s ease 0.5s forwards;
+  }
+
+  .hero-titulo em {
+    font-style: italic;
+    color: var(--verde-lima);
+    font-weight: 600;
+    display: block;
+  }
+
+  .hero-sub {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(168,228,160,0.55);
+    margin-top: 18px;
+    font-weight: 300;
+    opacity: 0;
+    animation: aparecer 0.9s ease 0.8s forwards;
+  }
+
+  @keyframes aparecer {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .scroll-hint {
+    margin-top: 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: aparecer 0.9s ease 1.3s forwards;
+  }
+
+  .scroll-hint span {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(126,213,111,0.4);
+    text-transform: uppercase;
+  }
+
+  .scroll-flecha {
+    width: 1px;
+    height: 36px;
+    background: linear-gradient(to bottom, rgba(126,213,111,0.45), transparent);
+    animation: latirFlecha 1.6s ease-in-out infinite;
+  }
+
+  @keyframes latirFlecha {
+    0%,100% { transform: scaleY(1); opacity: 0.5; }
+    50%      { transform: scaleY(1.3); opacity: 1; }
+  }
+
+  /* ─── DIVISOR ─── */
+  .divisor {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 40px 0;
+  }
+
+  .divisor-linea {
+    flex: 1;
+    height: 0.5px;
+    background: linear-gradient(to right, transparent, rgba(126,213,111,0.28), transparent);
+  }
+
+  .divisor-icon { color: var(--verde-lima); font-size: 16px; opacity: 0.7; }
+
+  /* ─── ETIQUETA DE SECCIÓN ─── */
+  .etiqueta {
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--verde-claro);
+    font-weight: 500;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .etiqueta::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: rgba(77,171,94,0.22);
+    max-width: 60px;
+  }
+
+  /* ─── CARD MENSAJE ─── */
+  .card-msg {
+    background: rgba(255,255,255,0.04);
+    border: 0.5px solid rgba(126,213,111,0.16);
+    border-radius: 18px;
+    padding: 28px 24px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-msg::before {
+    content: '"';
+    position: absolute;
+    top: -16px; left: 18px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 110px;
+    color: rgba(126,213,111,0.06);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .card-msg p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-style: italic;
+    line-height: 1.75;
+    color: var(--crema);
+    position: relative;
+    z-index: 1;
+    font-weight: 300;
+  }
+
+  /* ─── POLAROID ─── */
+  .polaroid-wrap {
+    margin: 28px 0;
+  }
+
+  /* Foto 1: inclinada a la derecha, alineada a la izquierda */
+  .polaroid-izq {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 8px;
+  }
+
+  /* Foto 2: inclinada a la izquierda, alineada a la derecha */
+  .polaroid-der {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 8px;
+  }
+
+  .polaroid {
+    background: #fffef8;
+    padding: 10px 10px 30px 10px;
+    width: 200px;
+    box-shadow:
+      0 4px 12px rgba(0,0,0,0.35),
+      0 1px 3px rgba(0,0,0,0.2),
+      inset 0 0 0 0.5px rgba(0,0,0,0.06);
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .polaroid-izq .polaroid {
+    transform: rotate(3deg);
+  }
+
+  .polaroid-der .polaroid {
+    transform: rotate(-2.5deg);
+  }
+
+  .polaroid-img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    background: #d4e8cc;
+  }
+
+  .polaroid-caption {
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: #555;
+    margin-top: 8px;
+    padding: 0 4px;
+    line-height: 1.3;
+  }
+
+  /* Tachuela decorativa encima del polaroid */
+  .polaroid::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #e8d08a, #c8a84b);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  /* ─── CARD CHISTE ─── */
+  .card-chiste {
+    background: rgba(126,213,111,0.05);
+    border: 0.5px solid rgba(126,213,111,0.18);
+    border-left: 3px solid var(--verde-lima);
+    border-radius: 0 14px 14px 0;
+    padding: 22px 22px 22px 20px;
+    margin-bottom: 14px;
+  }
+
+  .chiste-emoji {
+    font-size: 28px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .card-chiste p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(200,240,184,0.85);
+    font-weight: 300;
+  }
+
+  /* ─── CARD DESEO (oro) ─── */
+  .card-deseo {
+    background: linear-gradient(135deg, rgba(200,168,75,0.09) 0%, rgba(232,208,138,0.04) 100%);
+    border: 0.5px solid rgba(200,168,75,0.28);
+    border-radius: 18px;
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-deseo::before { content: '✦'; position: absolute; top: 14px; right: 18px; font-size: 13px; color: rgba(200,168,75,0.35); }
+  .card-deseo::after  { content: '✦'; position: absolute; bottom: 14px; left: 18px; font-size: 13px; color: rgba(200,168,75,0.35); }
+
+  .card-deseo p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--oro-claro);
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── FIRMA ─── */
+  .firma {
+    text-align: center;
+    padding: 36px 0 80px;
+  }
+
+  .firma-de {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(126,213,111,0.45);
+    margin-bottom: 10px;
+  }
+
+  .firma-nombre {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--verde-lima);
+  }
+
+  .firma-fecha {
+    font-size: 11px;
+    color: rgba(126,213,111,0.3);
+    margin-top: 10px;
+    letter-spacing: 2px;
+  }
+
+  /* ─── BOTÓN SONIDO ─── */
+  #btn-sonido {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(126,213,111,0.12);
+    border: 0.5px solid rgba(126,213,111,0.35);
+    color: var(--verde-lima);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    transition: all 0.2s;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    touch-action: manipulation;
+  }
+
+  #btn-sonido:active { transform: scale(0.95); }
+
+  /* ─── REVEAL SCROLL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+
+  .reveal.vis { opacity: 1; transform: translateY(0); }
+
+  /* ─── SECCIÓN ESPACIADO ─── */
+  .seccion { padding: 48px 0; }
+</style>
+</head>
+<body>
+
+<canvas id="confeti-canvas"></canvas>
+<div id="globos"></div>
+<div class="fondo"></div>
+
+<div class="contenido">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="badge-22">22</div>
+    <p class="hero-pre">Hoy es un día muy especial</p>
+    <h1 class="hero-titulo">
+      Feliz cumpleaños,
+      <em>Amiix</em>
+    </h1>
+    <p class="hero-sub">Con todo el cariño del mundo</p>
+    <div class="scroll-hint">
+      <span>Sigue leyendo</span>
+      <div class="scroll-flecha"></div>
+    </div>
+  </section>
+
+  <!-- DIVISOR -->
+  <div class="divisor reveal">
+    <div class="divisor-linea"></div>
+    <div class="divisor-icon">✦</div>
+    <div class="divisor-linea"></div>
+  </div>
+
+  <!-- MENSAJE 1 -->
+  <section class="seccion reveal">
+    <div class="etiqueta">Para ti</div>
+    <div class="card-msg">
+      <p>
+        <!-- ✏️ MENSAJE PRINCIPAL — emotivo, desde el corazón -->
+        Bueno, no se bien por donde comenzar, realmente son muchas cosas las que puedo decir de ti, y no quize hacerlo de manera básica
+        como todo el mundo JAJAJAJA, que se vea que de algo sirvió mi carrera no?
+        primero que nada esto es para felicitarte obviamente amiix, pero sobre todo para recordarte que aqui hay una persona que 
+        realmente se preocupa por ti, que veas que aqui realmente hay apoyo y sobre todo una verdadera amistad, no algo básico como 
+        las de más personas JAJAJA, no soy basico ni simple y eso lo sabes perfectamente, más que felicitarte por el dia de hoy quiero 
+        felicitarte por toda tu vida, por todos los dias que te esfuerzas y hasta por los que no haz querido mover un solo dedo,
+        la mayoria de personas dicen que las batallas no se ganan desde la cama, o que no se ganan desde el descanso y yo he comprobado que 
+        muchas de las veces es necesario. te admiro por muchas cosas que has hecho y que se que harás aún más, y quiero decirte que espero contar con vida y con el privilegio
+        de poderte ver hacer cada una de ella, que esta amistad sea eterna, compitaaa, realmente eres una gran chica y nadie puede decir lo contrario
+        y quien lo diga me dices para darnos un tiro JAJAJAJA
+        no ya enserio amee, sabes que siempre te voy a desear lo mejor y espero que este dia sea muy agradable para ti y te la pases de lo mejor
+        te quiero mucho amiix
+      </p>
+    </div>
+  </section>
+
+  <!-- FOTO 1 -->
+  <div class="polaroid-wrap polaroid-izq reveal">
+    <div class="polaroid">
+      <!-- La imagen se referencia desde la carpeta /fotos/ del repositorio -->
+      <img class="polaroid-img" src="./fotos/img1.jpeg" alt="Foto 1">
+      <p class="polaroid-caption">
+        <!-- ✏️ CAPTION FOTO 1 — una frase corta o fecha -->
+        Si la perra esta amarrada, aunque ladre todo el dia, no la deben de soltar JAJAJA ✨
+      </p>
+    </div>
+  </div>
+
+  <!-- MENSAJE 2 -->
+  <section class="seccion reveal">
+    <div class="card-msg">
+      <p>
+        <!-- ✏️ SEGUNDO PÁRRAFO — un recuerdo, reflexión o continuación -->
+        Aun sigo sin recordar como fue que nos empezamos a hablar y asi JAJAJAA, pero haya sido como haya sido
+        agradezco mucho a Dios la dicha de encontrarte, aunque haya sido en ese restaurante JAJAJA, que lugar más loco para trabajar me cae JAJAJA
+        pero nimodo, bueno el punto es que aqui estamos los dos con esta amistad tan bonita y real
+        solo quiero reconocerte todo lo que te esfuerzas a diario para lograr todo lo que haces, quisiera
+        ser más así pero no se puede JEJEJE, esto no es una cartita por solo este día, sino por felicitarte
+        por todos los dias que has tenido en tu vida, contagiando esa buena energía a todos
+      </p>
+    </div>
+  </section>
+
+  <!-- FOTO 2 -->
+  <div class="polaroid-wrap polaroid-der reveal">
+    <div class="polaroid">
+      <img class="polaroid-img" src="./fotos/img2.jpeg" alt="Foto 2">
+      <p class="polaroid-caption">
+        <!-- ✏️ CAPTION FOTO 2 -->
+        te quiero mucho Amiix 🌿
+      </p>
+    </div>
+  </div>
+
+  <!-- DIVISOR -->
+  <div class="divisor reveal">
+    <div class="divisor-linea"></div>
+    <div class="divisor-icon">✦</div>
+    <div class="divisor-linea"></div>
+  </div>
+
+  <!-- LO CHISTOSO -->
+  <section class="seccion reveal">
+    <div class="etiqueta">Y ahora lo chistoso...</div>
+
+    <div class="card-chiste">
+      <span class="chiste-emoji">😂</span>
+      <p>
+        <!-- ✏️ CHISTE / INSIDE JOKE 1 -->
+        No tenemos muchas anécdotas pero sé que llegarán muchas
+      gracias por hacerme reir siempre que nos vemos, más cuando a tu amiga y a mi nos dijiste sobre andar con el de la colectiva JAJAJAJA
+      eso lo siento, neta disculpa por haberte arruinado tus salidas con el jaja pero no lo iba a permitir, así es como puedo demostrar mi cariño y mi amistad JAJAA
+      </p>
+    </div>
+
+    <div class="card-chiste">
+      <span class="chiste-emoji">🤦‍♀️</span>
+      <p>
+        <!-- ✏️ CHISTE / INSIDE JOKE 2 -->
+        Aunque seas clasista te seguiré queriendo amix JAJAJA y no puedo juzgarte porque en cierta parte 
+        pues tambien lo soy JAJAJA pero ese día que les dije a ti y a tu amiga que la colectiva 
+        era mia fue algo único JAJAJAJA, no me lo esperaba JAJAJA pero pues nimodo
+        se que vendran muchas anecdotas más como cuando nos burlamos del yurian que me dí un frenón y se quedó atorado entre los asientos 
+        y que seguia diciendo del primer shot y la botella la iba tirando JAJAJAJA.
+        De verdad espero amee que algún dia podamos celebrar en alguna playita todo lo qeu logremos, porque se que será mucho
+        y que ambos vamos a sobresalir 
+      </p>
+    </div>
+  </section>
+
+  <!-- DIVISOR -->
+  <div class="divisor reveal">
+    <div class="divisor-linea"></div>
+    <div class="divisor-icon">✦</div>
+    <div class="divisor-linea"></div>
+  </div>
+
+  <!-- DESEO ESPECIAL -->
+  <section class="seccion reveal">
+    <div class="etiqueta">Mi deseo para ti</div>
+    <div class="card-deseo">
+      <p>
+        <!-- ✏️ DESEO O FRASE DE CIERRE — puede ser elegante y emotiva -->
+        Que este año que comienza esté lleno de todo lo que mereces. Y mereces muchísimo America. pasaleta increible te quiero
+      </p>
+    </div>
+  </section>
+
+  <!-- FIRMA -->
+  <div class="firma reveal">
+    <p class="firma-de">Con todo el cariño,</p>
+    <!-- ✏️ CAMBIA "Tu nombre" POR TU NOMBRE REAL -->
+    <p class="firma-nombre">Juanito </p>
+    <p class="firma-fecha" id="fecha"></p>
+  </div>
+
+</div><!-- /contenido -->
+
+<button id="btn-sonido" onclick="toggleSonido()" title="Música">🔇</button>
+
+<script>
+/* FECHA */
+(function(){
+  const m=['enero','febrero','marzo','abril','mayo','junio',
+           'julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const h=new Date();
+  document.getElementById('fecha').textContent=
+    h.getDate()+' de '+m[h.getMonth()]+' de '+h.getFullYear();
+})();
+
+/* GLOBOS */
+(function(){
+  const c=document.getElementById('globos');
+  const items=['🎈','🎈','🍃','🌿','🎈','✨','🎈','🍀'];
+  for(let i=0;i<12;i++){
+    const g=document.createElement('div');
+    g.className='globo';
+    g.textContent=items[Math.floor(Math.random()*items.length)];
+    g.style.left=Math.random()*100+'%';
+    g.style.animationDuration=(10+Math.random()*12)+'s';
+    g.style.animationDelay=(Math.random()*14)+'s';
+    g.style.fontSize=(16+Math.random()*20)+'px';
+    c.appendChild(g);
+  }
+})();
+
+/* CONFETI */
+(function(){
+  const canvas=document.getElementById('confeti-canvas');
+  const ctx=canvas.getContext('2d');
+  const cols=['#7ed56f','#4dab5e','#a8e4a0','#c8a84b','#e8d08a','#f5f0e8','#1a6b35'];
+  let p=[], activo=true;
+
+  function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+  window.addEventListener('resize',resize); resize();
+
+  for(let i=0;i<100;i++){
+    p.push({
+      x:Math.random()*canvas.width,
+      y:Math.random()*canvas.height-canvas.height*1.1,
+      r:3+Math.random()*5,
+      d:1.5+Math.random()*2.5,
+      color:cols[Math.floor(Math.random()*cols.length)],
+      ta:Math.random()*Math.PI*2,
+      ts:0.04+Math.random()*0.05,
+      rect:Math.random()>0.5
+    });
+  }
+
+  function draw(){
+    if(!activo){ ctx.clearRect(0,0,canvas.width,canvas.height); return; }
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    p.forEach(q=>{
+      q.ta+=q.ts; q.y+=q.d;
+      const t=Math.sin(q.ta)*14;
+      if(q.y>canvas.height+10){ q.y=-10; q.x=Math.random()*canvas.width; }
+      ctx.save();
+      ctx.translate(q.x+t,q.y);
+      ctx.rotate(q.ta*0.5);
+      ctx.fillStyle=q.color;
+      ctx.globalAlpha=0.7;
+      if(q.rect){ ctx.fillRect(-q.r/2,-q.r/2,q.r,q.r*1.8); }
+      else{ ctx.beginPath(); ctx.arc(0,0,q.r*0.55,0,Math.PI*2); ctx.fill(); }
+      ctx.restore();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+  setTimeout(()=>{ activo=false; },7500);
+})();
+
+/* REVEAL SCROLL */
+(function(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('vis'); });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+})();
+
+/* MÚSICA */
+let audioCtx=null, jugando=false, nodos=[], timer=null;
+
+function toggleSonido(){
+  const btn=document.getElementById('btn-sonido');
+  if(!jugando){
+    if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==='suspended') audioCtx.resume();
+    jugando=true; btn.textContent='🔊'; tocarMelodia();
+  } else {
+    jugando=false; btn.textContent='🔇';
+    nodos.forEach(n=>{ try{ n.stop(); }catch(e){} });
+    nodos=[]; if(timer) clearTimeout(timer);
+  }
+}
+
+function tocarMelodia(){
+  if(!jugando||!audioCtx) return;
+  const n={C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392,A4:440,B4:493.88,C5:523.25};
+  const mel=[
+    [n.C4,.4],[n.C4,.2],[n.D4,.6],[n.C4,.6],[n.F4,.6],[n.E4,1.2],
+    [n.C4,.4],[n.C4,.2],[n.D4,.6],[n.C4,.6],[n.G4,.6],[n.F4,1.2],
+    [n.C4,.4],[n.C4,.2],[n.C5,.6],[n.A4,.6],[n.F4,.6],[n.E4,.6],[n.D4,1.0],
+    [n.B4,.4],[n.B4,.2],[n.A4,.6],[n.F4,.6],[n.G4,.6],[n.F4,1.4]
+  ];
+  let t=audioCtx.currentTime+0.05;
+  const master=audioCtx.createGain();
+  master.gain.setValueAtTime(0.16,t);
+  master.connect(audioCtx.destination);
+  mel.forEach(([freq,dur])=>{
+    const o=audioCtx.createOscillator();
+    const g=audioCtx.createGain();
+    o.type='triangle'; o.frequency.value=freq;
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(0.9,t+0.04);
+    g.gain.setValueAtTime(0.9,t+dur-0.06);
+    g.gain.linearRampToValueAtTime(0,t+dur);
+    o.connect(g); g.connect(master);
+    o.start(t); o.stop(t+dur);
+    nodos.push(o); t+=dur;
+  });
+  const total=mel.reduce((a,[,d])=>a+d,0)*1000;
+  timer=setTimeout(()=>{ if(jugando){ nodos=[]; tocarMelodia(); } },total+200);
+}
+</script>
+</body>
+</html>

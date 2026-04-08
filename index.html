@@ -617,6 +617,7 @@
 </div><!-- /contenido -->
 
 <button id="btn-sonido" onclick="toggleSonido()" title="Música">🔇</button>
+ <audio id="audio" src="./audio/cancion.mp3" loop></audio>
 
 <script>
 /* FECHA */
@@ -701,15 +702,14 @@
 let audioCtx=null, jugando=false, nodos=[], timer=null;
 
 function toggleSonido(){
-  const btn=document.getElementById('btn-sonido');
-  if(!jugando){
-    if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-    if(audioCtx.state==='suspended') audioCtx.resume();
-    jugando=true; btn.textContent='🔊'; tocarMelodia();
+  const btn = document.getElementById('btn-sonido');
+  const audio = document.getElementById('audio');
+  if(audio.paused){
+    audio.play();
+    btn.textContent = '🔊';
   } else {
-    jugando=false; btn.textContent='🔇';
-    nodos.forEach(n=>{ try{ n.stop(); }catch(e){} });
-    nodos=[]; if(timer) clearTimeout(timer);
+    audio.pause();
+    btn.textContent = '🔇';
   }
 }
 

@@ -713,34 +713,6 @@ function toggleSonido(){
   }
 }
 
-function tocarMelodia(){
-  if(!jugando||!audioCtx) return;
-  const n={C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392,A4:440,B4:493.88,C5:523.25};
-  const mel=[
-    [n.C4,.4],[n.C4,.2],[n.D4,.6],[n.C4,.6],[n.F4,.6],[n.E4,1.2],
-    [n.C4,.4],[n.C4,.2],[n.D4,.6],[n.C4,.6],[n.G4,.6],[n.F4,1.2],
-    [n.C4,.4],[n.C4,.2],[n.C5,.6],[n.A4,.6],[n.F4,.6],[n.E4,.6],[n.D4,1.0],
-    [n.B4,.4],[n.B4,.2],[n.A4,.6],[n.F4,.6],[n.G4,.6],[n.F4,1.4]
-  ];
-  let t=audioCtx.currentTime+0.05;
-  const master=audioCtx.createGain();
-  master.gain.setValueAtTime(0.16,t);
-  master.connect(audioCtx.destination);
-  mel.forEach(([freq,dur])=>{
-    const o=audioCtx.createOscillator();
-    const g=audioCtx.createGain();
-    o.type='triangle'; o.frequency.value=freq;
-    g.gain.setValueAtTime(0,t);
-    g.gain.linearRampToValueAtTime(0.9,t+0.04);
-    g.gain.setValueAtTime(0.9,t+dur-0.06);
-    g.gain.linearRampToValueAtTime(0,t+dur);
-    o.connect(g); g.connect(master);
-    o.start(t); o.stop(t+dur);
-    nodos.push(o); t+=dur;
-  });
-  const total=mel.reduce((a,[,d])=>a+d,0)*1000;
-  timer=setTimeout(()=>{ if(jugando){ nodos=[]; tocarMelodia(); } },total+200);
-}
 </script>
 </body>
 </html>
